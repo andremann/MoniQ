@@ -1,0 +1,49 @@
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.springframework.org/schema/security"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+    <http auto-config="true">
+        <intercept-url pattern="/dashboard.html"
+                       access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_LDAP_${data.flow.monitoring.ldap.returnedRole}')"/>
+        <intercept-url pattern="/ajax/**/"
+                       access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_LDAP_${data.flow.monitoring.ldap.returnedRole}')"/>
+
+        <form-login login-page="/login.html" login-processing-url="/login" username-parameter="username"
+                    password-parameter="password"
+                    authentication-success-handler-ref="securityHandlers"
+                    authentication-failure-handler-ref="securityHandlers"/>
+
+        <logout logout-url="/logout" success-handler-ref="securityHandlers"/>
+
+        <csrf disabled="false" token-repository-ref="csrfTokenRepository"/>
+        <custom-filter ref="csrfHeaderFilter" after="CSRF_FILTER"/>
+    </http>
+
+    <ldap-server url="${data.flow.monitoring.ldap.server}" root="${data.flow.monitoring.ldap.root}"/>
+
+    <beans:bean id="csrfHeaderFilter" class="eu.dnetlib.monitoring.server.security.CsrfHeaderFilter"/>
+    <beans:bean id="csrfTokenRepository"
+                class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository">
+        <beans:property name="headerName" value="X-XSRF-TOKEN"/>
+    </beans:bean>
+
+    <beans:bean id="securityHandlers" class="eu.dnetlib.monitoring.server.security.LoginLogoutSecurityHandlers"/>
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider>
+            <user-service>
+                <user name="dfm" password="mfd" authorities="ROLE_ADMIN"/>
+                <user name="guest" password="guest" authorities="ROLE_USER"/>
+            </user-service>
+        </authentication-provider>
+        <ldap-authentication-provider role-prefix="ROLE_LDAP_"
+                                      user-dn-pattern="${data.flow.monitoring.ldap.userDnPattern}"
+                                      group-role-attribute="${data.flow.monitoring.ldap.groupRoleAttribute}"
+                                      group-search-base="${data.flow.monitoring.ldap.groupSearchBase}"/>
+    </authentication-manager>
+
+</beans:beans>

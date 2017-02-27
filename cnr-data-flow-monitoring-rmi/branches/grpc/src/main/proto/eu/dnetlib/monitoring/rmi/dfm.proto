@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package monitoring;
+
+option java_multiple_files = true;
+option java_package = "eu.dnetlib.monitoring.rmi";
+option java_outer_classname = "LogStashProto";
+
+// Interface exported by the server.
+service LogStashService {
+  rpc DeliverObservation(Observation) returns (GenericResponse) {}
+  rpc DeliverObservationBatch(ObservationBatch) returns (GenericResponse) {}
+}
+
+message Observation {
+    int64 timestamp = 1;
+    string monitoringScenario = 2;
+    string sensorType = 3;
+    string sensorId = 4;
+    string metric = 5;
+    double log = 6;
+    map<string, string> labels = 7;
+}
+
+message ObservationBatch {
+    repeated Observation observation = 1;
+}
+
+message GenericResponse {
+    bool success = 1;
+}

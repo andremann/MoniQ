@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>eu.dnetlib</groupId>
+        <artifactId>cnr-data-flow-monitoring-parent</artifactId>
+        <version>2.0.0</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>eu.dnetlib</groupId>
+	<artifactId>cnr-data-flow-monitoring-rmi</artifactId>
+	<name>cnr-data-flow-monitoring-rmi</name>
+	<version>2.0.0-java8</version>
+	<scm>
+		<developerConnection>scm:svn:https://svn.driver.research-infrastructures.eu/driver/data-flow-monitoring/cnr-data-flow-monitoring-rmi/tags/cnr-data-flow-monitoring-rmi-2.0.0-java8</developerConnection>
+	</scm>
+	<repositories>
+	   <repository>
+	      <id>clojars</id>
+	      <url>http://clojars.org/repo/</url>
+	   </repository>
+	</repositories>
+	<dependencies>
+		<!-- Kryonet -->
+		<dependency>
+			<groupId>kryonet</groupId>
+			<artifactId>kryonet</artifactId>
+			<version>2.21</version>
+		</dependency>
+		<dependency>
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>kryo</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<!--        <dependency> -->
+        <!--            <groupId>com.esotericsoftware</groupId> -->
+        <!--            <artifactId>kryo</artifactId> -->
+        <!--            <version>3.0.0-shaded</version> -->
+        <!--        </dependency> -->
+        <!--        <dependency> -->
+		
+        <!-- Guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>17.0</version>
+        </dependency>
+        
+        <!-- Gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3.1</version>        
+        </dependency>
+		
+		<!-- InfluxDB -->
+		<!--             <groupId>org.influxdb</groupId> -->
+		<!--             <artifactId>influxdb-java</artifactId> -->
+		<!--             <version>2.0-SNAPSHOT</version> -->
+		<!--         </dependency> -->
+	</dependencies>
+	
+</project>

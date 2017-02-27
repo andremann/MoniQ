@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Hessian exporter-->
+	<bean name="/"
+	      class="org.springframework.remoting.caucho.HessianServiceExporter">
+		<property name="service" ref="DataFlowMonitoring"></property>
+		<property name="serviceInterface" value="eu.dnetlib.monitoring.rmi.DataFlowMonitoringAPI"></property>
+	</bean>
+
+	<!-- The DFM service implementation bean -->
+	<bean id="DataFlowMonitoring" class="eu.dnetlib.monitoring.server.impl.DataFlowMonitoringService" init-method="init">
+		<property name="observationDAO" ref="chosenDao"/>
+		<property name="configurationDAO" ref="configurationDao"/>
+	</bean>
+
+</beans>

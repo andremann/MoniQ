@@ -1,0 +1,19 @@
+{
+  "monitoringScenario": "JUnit",
+  "globalParams": {},
+  "globalLabels": {
+	"collectionType": "filesystem"
+  },
+  "metrics": {
+	"pdf count": {
+	  "name": "pdf count",
+	  "description": "pdf count",
+	  "labels": {
+		"repositoryId": "5"
+	  },
+	  "params": {
+		"path": "/Users/andrea/data/pdf_stores/5"
+	  }
+	}
+  }
+}

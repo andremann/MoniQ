@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+					      http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+    <import resource="./spring-security.xml"/>
+    
+	<!-- Service chosen DAO -->
+	<alias alias="chosenDao" name="${data.flow.monitoring.chosen.stash.backend}" />
+	<bean id="logStashService" class="eu.dnetlib.monitoring.server.impl.LogStashServiceImpl" init-method="init">
+		<property name="dao" ref="chosenDao" />
+	</bean>
+	
+	<!-- PostgreSQL -->
+	<bean id="postgresDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://${data.flow.monitoring.backend.postgres.host}:${data.flow.monitoring.backend.postgres.port}/${data.flow.monitoring.backend.postgres.db.name}"/>
+        <property name="username" value="${data.flow.monitoring.backend.postgres.username}"/>
+        <property name="password" value="${data.flow.monitoring.backend.postgres.password}"/>
+    </bean>
+	<bean id="postgresJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="postgresDataSource" />
+	</bean>
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="postgresDataSource" />
+    </bean>
+	<bean id="postgresTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="transactionManager" />
+	</bean>
+    <bean id="postgresStashDao" class="eu.dnetlib.monitoring.server.dao.postgres.impl.ObservationDAO">
+		<property name="jdbcTemplate" ref="postgresJdbcTemplate" />
+		<property name="transactionTemplate" ref="postgresTransactionTemplate" />
+	</bean>
+	<bean id="controlDao" class="eu.dnetlib.monitoring.server.dao.postgres.impl.ControlDAO">
+		<property name="jdbcTemplate" ref="postgresJdbcTemplate" />
+		<property name="transactionTemplate" ref="postgresTransactionTemplate" />
+	</bean>
+	<bean id="configurationDao" class="eu.dnetlib.monitoring.server.dao.postgres.impl.ConfigurationDAO">
+		<property name="jdbcTemplate" ref="postgresJdbcTemplate" />
+		<property name="transactionTemplate" ref="postgresTransactionTemplate" />
+	</bean>
+	<bean id="scenarioDao" class="eu.dnetlib.monitoring.server.dao.postgres.impl.ScenarioDAO">
+		<property name="jdbcTemplate" ref="postgresJdbcTemplate" />
+		<property name="transactionTemplate" ref="postgresTransactionTemplate" />
+	</bean>
+		
+</beans>

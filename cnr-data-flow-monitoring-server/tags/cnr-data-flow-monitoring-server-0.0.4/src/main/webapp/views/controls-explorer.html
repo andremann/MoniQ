@@ -1,0 +1,136 @@
+<div class="row">
+	<div class="col-md-12">
+        <h1 class="page-header">Controls explorer for scenario ({{dashboard.currentScenario}})</h1>
+    </div>
+</div>
+
+<div class="row">
+	<div>
+		<div class="form-group col-xs-9">
+			<button ng-click="controlsExplorer.open(control)" type="button" class="btn btn-success btn-circle"><i class="fa fa-plus"></i></button>
+		</div>
+		<div class="form-group col-xs-3 pull-right">
+			<input type="text" class="form-control ng-pristine ng-valid" ng-model="controlsExplorer.controlFilter" placeholder="Filter by...">
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="deckgrid clearfix" deckgrid source="controlsExplorer.controls" filter="controlsExplorer.controlFilter" cardTemplate="partials/decker-control-card.html"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="controlModal" tabindex="-1" role="dialog" aria-labelledby="controlModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="controlModalLabel">Edit control (id: {{controlsExplorer.tmpControl.id}})</h4>
+			</div>
+			<div class="modal-body">
+				<form name="controlForm">
+					<div class="form-group" ng-class="{ 'has-error': controlForm.monitoringScenario.$invalid }">
+						<div class="row">
+							<div class="col-xs-9">
+								<label class="control-label" for="monitoringScenario">Monitoring scenario</label>
+								<input type="text" class="form-control" name="monitoringScenario" placeholder="Enter monitoring scenario" ng-model="controlsExplorer.tmpControl.monitoringScenario" disabled required>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" ng-class="{ 'has-error': controlForm.controlName.$invalid }">
+						<div class="row">
+							<div class="col-xs-9">
+								<label class="control-label" for="controlName">Control name</label>
+								<input type="text" class="form-control" name="controlName" placeholder="Enter name" ng-model="controlsExplorer.tmpControl.name" required>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" ng-class="{ 'has-error': controlForm.analyzerClass.$invalid }">
+						<div class="row">
+							<div class="col-xs-9">
+								<label class="control-label" for="analyzerClass">Analyzer class</label>
+								<ui-select name="analyzerClass" ng-model="controlsExplorer.tmpControl.analyzerClass" theme="bootstrap" ng-click="controlsExplorer.fetchAnalyzers()" required>
+									<ui-select-match placeholder="Select analyzer class">{{$select.selected.canonicalName}}</ui-select-match>
+									<ui-select-choices repeat="analyzer.canonicalName as analyzer in controlsExplorer.analyzers | filter: $select.search">
+										<span ng-bind-html="analyzer.name | highlight: $select.search"></span>
+										<small>
+											<br/><i><span ng-bind-html="analyzer.description | highlight: $select.search"></span></i>
+										</small>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" ng-class="{ 'has-error': controlForm.status.$invalid }">
+						<div class="row">
+							<div class="col-xs-9">
+								<label class="control-label" for="status">Status</label>
+								<div name="status" class="btn-group btn-group-xs" role="group" aria-label="Status" ng-model="controlsExplorer.tmpControl.status">
+									<button type="button" class="btn btn-default" ng-class="{'btn-success': controlsExplorer.tmpControl.status == 'active'}" ng-click="controlsExplorer.setStatus('active')">Active</button>
+									<button type="button" class="btn btn-default" ng-class="{'btn-danger': controlsExplorer.tmpControl.status == 'inactive'}" ng-click="controlsExplorer.setStatus('inactive')">Inactive</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="selectors">Selectors (metric, labelName, labelValue, #samples)</label>
+						<div class="row" ng-repeat="sel in controlsExplorer.tmpControl.selectors" ng-form="selector">
+							<div class="col-xs-3">
+								<div class="form-group" ng-class="{ 'has-error': selector.metric.$invalid }">
+									<ui-select name="metric" ng-model="sel.metric" theme="bootstrap" ng-click="controlsExplorer.fetchMetrics()" required>
+										<ui-select-match placeholder="Select metric">{{$select.selected}}</ui-select-match>
+										<ui-select-choices repeat="metric in controlsExplorer.metrics | filter: $select.search">
+											<small>
+												<span ng-bind-html="metric | highlight: $select.search"></span>
+											</small>
+										</ui-select-choices>
+									</ui-select>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-group" ng-class="{ 'has-error': selector.labelName.$invalid }">
+									<ui-select name="labelName" ng-model="sel.labelName" theme="bootstrap" ng-click="controlsExplorer.fetchLabelNames(sel.metric)" ng-disabled="!sel.metric" required>
+										<ui-select-match placeholder="Label name">{{$select.selected}}</ui-select-match>
+										<ui-select-choices repeat="label in controlsExplorer.labelNames | filter: $select.search">
+											<small>
+												<span ng-bind-html="label | highlight: $select.search"></span>
+											</small>
+										</ui-select-choices>
+									</ui-select>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-group" ng-class="{ 'has-error': selector.labelValue.$invalid }">
+									<ui-select name="labelValue" ng-model="sel.labelValue" theme="bootstrap" ng-click="controlsExplorer.fetchLabelValues(sel.metric, sel.labelName)" ng-disabled="!sel.labelName" required>
+										<ui-select-match placeholder="Label value">{{$select.selected}}</ui-select-match>
+										<ui-select-choices repeat="label in controlsExplorer.labelValues | filter: $select.search">
+											<small>
+												<span ng-bind-html="label | highlight: $select.search"></span>
+											</small>
+										</ui-select-choices>
+									</ui-select>
+								</div>
+							</div>
+							<div class="col-xs-2">
+								<div class="form-group" ng-class="{ 'has-error': selector.samples.$invalid }">
+									<input type="number" class="form-control" placeholder="Samples" name="samples" ng-model="sel.samples" required min="1">
+								</div>
+							</div>
+							<button type="button" class="btn btn-warning btn-circle" ng-click="controlsExplorer.removeSelector($index)"><i class="fa fa-times"></i></button>
+						</div>
+						<div class="row">
+							<div class="col-xs-2">
+								<button type="button" class="btn btn-success btn-circle" ng-click="controlsExplorer.addSelector()"><i class="fa fa-plus"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+				<button type="button" class="btn btn-primary" ng-disabled="controlForm.$invalid" ng-click="controlsExplorer.save()">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>

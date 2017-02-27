@@ -1,0 +1,15 @@
+{
+  "monitoringScenario": "JUnit",
+  "globalParams": {},
+  "globalLabels": {},
+  "metrics": {
+	"completeness": {
+	  "name": "completeness",
+	  "description": "completeness",
+	  "labels": {},
+	  "params": {
+		"xpaths": "['//identifier', '//title', '//description']"
+	  }
+	}
+  }
+}

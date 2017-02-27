@@ -1,0 +1,16 @@
+{
+  "monitoringScenario": "JUnit",
+  "globalParams": {},
+  "globalLabels": {},
+  "metrics": {
+	"randomness": {
+	  "name": "randomness",
+	  "description": "randomness",
+	  "labels": {
+		"label_a": "bar",
+		"label_b": "repoB"
+	  },
+	  "params": {}
+	}
+  }
+}

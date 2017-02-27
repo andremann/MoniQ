@@ -1,0 +1,215 @@
+<div class="row">
+	<div class="col-md-12">
+		<h1 class="page-header">Explore metrics (reports)</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-3">
+		<ul class="nav nav-pills nav-stacked">
+		  <li ng-repeat="m in metricsExplorer.metrics" ng-class="{'active': m == metricsExplorer.currentMetric}"><a ng-href="#/scenarios/{{dashboard.currentScenario}}/metrics/{{m}}" >{{m}}</a></li>
+		</ul>
+	</div>
+
+	<div class="col-md-9" ng-show="metricsExplorer.currentMetric">
+		<div class="row">
+			<div class="col-md-12">
+				<h2>{{metricsExplorer.currentMetric}} <small><i class="fa fa-tag"></i>{{metricsExplorer.currentLabel}}</small>
+					<div class="btn-group">
+						<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"> Select label <span class="caret"></span></button>
+						<ul class="dropdown-menu scrollable-dropdown-menu pull-right" role="menu">
+							<li ng-repeat="l in metricsExplorer.labels" ng-click="metricsExplorer.selectLabel(l)"><a>{{l}}</a></li>
+						</ul>
+					</div>
+				</h2>
+				
+			</div>
+		</div>
+		<div role="tabpanel">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a data-target="#chart"
+					aria-controls="chart" role="tab" data-toggle="tab">Chart</a></li>
+				<li role="presentation"><a data-target="#table"
+					aria-controls="table" role="tab" data-toggle="tab">Table</a></li>
+			</ul>
+	
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active animated fadeIn" id="chart">
+					<div id="lineGraph" style="height: 400px;"></div>
+					<div class="row">
+					    <div class="col-md-12">
+					        <h1 class="page-header">Report<button ng-click="metricsExplorer.createControl()" type="button" class="pull-right btn btn-success"><i class="fa fa-plus"></i> Add control</button></h1>
+					    </div>
+					</div>
+					<div class="row">
+						<div ng-show="metricsExplorer.report.length == 0" class="col-md-6">
+							<div  class="panel panel-yellow">
+					            <div class="panel-heading">
+					                <div class="row">
+					                    <div class="col-xs-3">
+					                        <i class="fa fa-5x fa-warning"></i>
+					                    </div>
+					                    <div class="col-xs-9 text-right">
+					                        <h3>No controls defined..</h3>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+						</div>
+						<div ng-repeat="control in metricsExplorer.report" class="col-md-6">
+							<div  class="panel" ng-class="{'panel-green': control.result == true, 'panel-red': control.result == false}">
+					            <div class="panel-heading">
+					                <div class="row">
+					                    <div class="col-xs-3">
+					                        <i class="fa fa-5x" ng-class="{'fa-thumbs-o-up': control.result == true, 'fa-thumbs-o-down': control.result == false}"></i>
+					                    </div>
+					                    <div class="col-xs-9 text-right">
+					                        <h3>{{control.name}}</h3>
+					                        <div ng-repeat="selector in control.selectors"><i class="fa fa-crosshairs"></i> {{selector.metric}} > {{selector.labelName}} > {{selector.labelValue}}({{selector.samples}})</div>
+					                        <div class="long-text" data-placement="top" title="{{control.analyzerClass}}" onmouseenter="$(this).tooltip('show')"><i class="fa fa-code"></i> {{control.analyzerClass}}</div>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+						</div>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane animated fadeIn" id="table">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Timestamp</th>
+								<th class="text-right" ng-repeat="label in metricsExplorer.labelValues">{{label}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="point in metricsExplorer.observations" ng-class="{'warning': point.warning}">
+								<th scope="row">{{point.timestamp | date:'yyyy-MM-dd HH:mm:ss Z'}}</th>
+								<td class="text-right" ng-repeat="label in metricsExplorer.labelValues">{{point[label]}}</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal for new Control -->
+<div class="modal fade" id="controlModal" tabindex="-1" role="dialog" aria-labelledby="controlModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="controlModalLabel">Edit control (id: {{metricsExplorer.tmpControl.id}})</h4>
+            </div>
+            <div class="modal-body">
+                <form name="controlForm">
+                    <div class="form-group" ng-class="{ 'has-error': controlForm.monitoringScenario.$invalid }">
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <label class="control-label" for="monitoringScenario">Monitoring scenario</label>
+                                <input type="text" class="form-control" name="monitoringScenario" placeholder="Enter monitoring scenario" ng-model="metricsExplorer.tmpControl.monitoringScenario" disabled required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': controlForm.controlName.$invalid }">
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <label class="control-label" for="controlName">Control name</label>
+                                <input type="text" class="form-control" name="controlName" placeholder="Enter name" ng-model="metricsExplorer.tmpControl.name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': controlForm.analyzerClass.$invalid }">
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <label class="control-label" for="analyzerClass">Analyzer class</label>
+                                <ui-select name="analyzerClass" ng-model="metricsExplorer.tmpControl.analyzerClass" theme="bootstrap" ng-click="metricsExplorer.fetchAnalyzers()" required>
+                                    <ui-select-match placeholder="Select analyzer class">{{$select.selected.canonicalName}}</ui-select-match>
+                                    <ui-select-choices repeat="analyzer.canonicalName as analyzer in metricsExplorer.analyzers | filter: $select.search">
+                                        <span ng-bind-html="analyzer.name | highlight: $select.search"></span>
+                                        <small>
+                                            <br/><i><span ng-bind-html="analyzer.description | highlight: $select.search"></span></i>
+                                        </small>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': controlForm.status.$invalid }">
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <label class="control-label" for="status">Status</label>
+                                <div name="status" class="btn-group btn-group-xs" role="group" aria-label="Status" ng-model="metricsExplorer.tmpControl.status">
+                                    <button type="button" class="btn btn-default" ng-class="{'btn-success': metricsExplorer.tmpControl.status == 'active'}" ng-click="metricsExplorer.setStatus('active')">Active</button>
+                                    <button type="button" class="btn btn-default" ng-class="{'btn-danger': metricsExplorer.tmpControl.status == 'inactive'}" ng-click="metricsExplorer.setStatus('inactive')">Inactive</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="selectors">Selectors (metric, labelName, labelValue, #samples)</label>
+                        <div class="row" ng-repeat="sel in metricsExplorer.tmpControl.selectors" ng-form="selector">
+                            <div class="col-xs-3">
+                                <div class="form-group" ng-class="{ 'has-error': selector.metric.$invalid }">
+                                    <ui-select name="metric" ng-model="sel.metric" theme="bootstrap" ng-click="metricsExplorer.fetchMetrics()" required>
+                                        <ui-select-match placeholder="Select metric">{{$select.selected}}</ui-select-match>
+                                        <ui-select-choices repeat="metric in metricsExplorer.metrics | filter: $select.search">
+                                            <small>
+                                                <span ng-bind-html="metric | highlight: $select.search"></span>
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="form-group" ng-class="{ 'has-error': selector.labelName.$invalid }">
+                                    <ui-select name="labelName" ng-model="sel.labelName" theme="bootstrap" ng-click="metricsExplorer.fetchLabelNames(sel.metric)" ng-disabled="!sel.metric" required>
+                                        <ui-select-match placeholder="Label name">{{$select.selected}}</ui-select-match>
+                                        <ui-select-choices repeat="label in metricsExplorer.labelNames | filter: $select.search">
+                                            <small>
+                                                <span ng-bind-html="label | highlight: $select.search"></span>
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="form-group" ng-class="{ 'has-error': selector.labelValue.$invalid }">
+                                    <ui-select name="labelValue" ng-model="sel.labelValue" theme="bootstrap" ng-click="metricsExplorer.fetchLabelValues(sel.metric, sel.labelName)" ng-disabled="!sel.labelName" required>
+                                        <ui-select-match placeholder="Label value">{{$select.selected}}</ui-select-match>
+                                        <ui-select-choices repeat="label in metricsExplorer.labelValues | filter: $select.search">
+                                            <small>
+                                                <span ng-bind-html="label | highlight: $select.search"></span>
+                                            </small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="form-group" ng-class="{ 'has-error': selector.samples.$invalid }">
+                                    <input type="number" class="form-control" placeholder="Samples" name="samples" ng-model="sel.samples" required min="1">
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-warning btn-circle" ng-click="metricsExplorer.removeSelector($index)"><i class="fa fa-times"></i></button>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-success btn-circle" ng-click="metricsExplorer.addSelector()"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-primary" ng-disabled="controlForm.$invalid" ng-click="metricsExplorer.save()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

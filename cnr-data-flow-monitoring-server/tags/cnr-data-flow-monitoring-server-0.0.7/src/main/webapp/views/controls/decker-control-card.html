@@ -1,0 +1,14 @@
+<div class="panel animated fadeIn" data-ng-class="{'panel-primary': card.status=='active', 'panel-yellow': card.status=='inactive'}">
+    <div class="panel-heading">
+    	<i class="fa fa-check-square-o fa-2x"></i> {{card.name}}
+    </div>
+    <div class="panel-body">
+        <div data-ng-repeat="selector in card.selectors"><i class="fa fa-crosshairs"></i> {{selector.metric}} > {{selector.labelName}} > {{selector.labelValue}}[{{selector.samples}}]</div>
+        <p class="long-text" data-placement="top" title="{{card.analyzerClass}}" onmouseenter="$(this).tooltip('show')"><i class="fa fa-code"></i> {{card.analyzerClass}}</p>
+        <p class="text-primary"><small>{{card.lastModified | date:'medium'}}</small></p>
+    </div>
+    <div class="panel-footer">
+    	<button data-ng-click="mother.controlsExplorer.open(card)" type="button" class="btn btn-default btn-circle"><i class="fa fa-edit"></i></button>
+     	<button data-ng-click="mother.controlsExplorer.remove(card)" type="button" class="btn btn-default btn-circle"><i class="fa fa-trash-o"></i></button>
+    </div>
+</div>

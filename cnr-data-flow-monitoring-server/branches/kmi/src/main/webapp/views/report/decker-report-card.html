@@ -1,0 +1,30 @@
+<div  class="panel animated fadeIn" ng-class="{'panel-green': card.result == true, 'panel-red': card.result == false}">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-3">
+                <i class="fa fa-5x" ng-class="{'fa-thumbs-o-up': card.result == true, 'fa-thumbs-o-down': card.result == false}"></i>
+            </div>
+            <div class="col-xs-9">
+                <h3>{{card.name}}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+	            <div ng-repeat="selector in card.selectors">
+		            <p class="long-text" data-placement="top" title="{{selector.metric}}[{{selector.labelsConditions | labels}}][{{selector.samples}}]"
+		               onmouseenter="$(this).tooltip('show')">
+			            <i class="fa fa-crosshairs"></i> {{selector.metric}}[{{selector.labelsConditions | labels}}({{selector.samples}})
+		            </p>
+	            </div>
+                <div class="long-text" data-placement="top" title="{{card.analyzerClass}}" onmouseenter="$(this).tooltip('show')"><i class="fa fa-code"></i> {{card.analyzerClass}}</div>
+            </div>
+        </div>
+    </div>
+    <a ng-href="#/scenarios/{{mother.dashboard.currentScenario}}/expose/{{mother.composeExposeUrl(card.selectors)}}">
+	    <div class="panel-footer">
+	        <span class="pull-left">Go to details</span>
+	        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+	        <div class="clearfix"></div>
+	    </div>
+    </a>
+</div>

@@ -1,0 +1,86 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>eu.dnetlib</groupId>
+        <artifactId>cnr-data-flow-monitoring-parent</artifactId>
+        <version>1.0.1</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>eu.dnetlib</groupId>
+	<artifactId>cnr-data-flow-monitoring-aspects</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<properties>
+		<org.aspectj-version>1.7.4</org.aspectj-version>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>aspectj-maven-plugin</artifactId>
+				<version>1.6</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjrt</artifactId>
+						<version>1.7.4</version>
+					</dependency>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjtools</artifactId>
+						<version>1.7.4</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<showWeaveInfo>true</showWeaveInfo>
+					<verbose>true</verbose>
+					<outxml>true</outxml>
+					<complianceLevel>1.6</complianceLevel>
+					<source>1.6</source>
+					<target>1.6</target>
+					<includes>
+						<include>**/*.java</include>
+						<include>**/*.aj</include>
+					</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>compile-with-aspectj</id>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- AOP dependencies. -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${org.aspectj-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjtools</artifactId>
+			<version>${org.aspectj-version}</version>
+		</dependency>
+		
+		<!-- Data Flow Monitoring RMI -->
+		<dependency>
+			<groupId>eu.dnetlib</groupId>
+			<artifactId>cnr-data-flow-monitoring-core</artifactId>
+			<version>[0.0.0, 1.0.0)</version>
+		</dependency>
+	</dependencies>
+</project>

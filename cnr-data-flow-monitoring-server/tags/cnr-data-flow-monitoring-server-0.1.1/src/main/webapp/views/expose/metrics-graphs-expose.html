@@ -1,0 +1,51 @@
+<div class="row">
+	<div class="col-md-12">
+		<h1 class="page-header">Explore metrics (graphs)</h1>
+	</div>
+</div>
+<div class="row">
+<div class="col-xs-3">
+    <div class="form-group">
+	        <ui-select name="metric" ng-model="expose.selectedMetric" theme="bootstrap" ng-click="expose.fetchMetrics()">
+	            <ui-select-match placeholder="Select metric">{{$select.selected}}</ui-select-match>
+	            <ui-select-choices repeat="metric in expose.metrics | filter: $select.search">
+	                <small>
+	                    <span ng-bind-html="metric | highlight: $select.search"></span>
+	                </small>
+	            </ui-select-choices>
+	        </ui-select>
+	    </div>
+	</div>
+	<div class="col-xs-3">
+	    <div class="form-group">
+	        <ui-select name="labelName" ng-model="expose.selectedLabel" theme="bootstrap" ng-click="expose.fetchLabelNames(expose.selectedMetric)" ng-disabled="!expose.selectedMetric">
+	            <ui-select-match placeholder="Label name">{{$select.selected}}</ui-select-match>
+	            <ui-select-choices repeat="label in expose.labelNames | filter: $select.search">
+	                <small>
+	                    <span ng-bind-html="label | highlight: $select.search"></span>
+	                </small>
+	            </ui-select-choices>
+	        </ui-select>
+	    </div>
+	</div>
+	<div class="col-xs-1">
+        <div class="form-group">
+            <button ng-click="expose.addWidget()" type="button" class="btn btn-success btn-circle" ng-disabled="!expose.selectedMetric || !expose.selectedLabel"><i class="fa fa-plus"></i></button>
+            <button ng-click="expose.reset()" type="button" class="btn btn-info btn-circle"><i class="fa fa-trash-o"></i></button>
+        </div>
+	</div>
+</div>
+<div class="row">
+	<div ng-repeat="widget in expose.widgets" class="col-md-6 animated fadeIn">
+		<div class="panel panel-default" ng-controller="GraphWidgetController">
+			<div class="panel-heading">
+				<i class="fa fa-bar-chart-o fa-fw"></i> {{widget.metric}} > {{widget.label}}
+			</div>
+			<!-- /.panel-heading -->
+			<div class="panel-body">
+				<div id="{{canvasId}}" style="height: 300px;"></div>
+			</div>
+			<!-- /.panel-body -->
+		</div>
+	</div>
+</div>

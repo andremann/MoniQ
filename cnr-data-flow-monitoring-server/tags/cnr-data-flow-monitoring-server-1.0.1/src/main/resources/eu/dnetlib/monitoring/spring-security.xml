@@ -1,0 +1,61 @@
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.springframework.org/schema/security"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+    <http auto-config="true">
+        <intercept-url pattern="/hessian/**" method="POST" access="permitAll"/>
+        <intercept-url pattern="/dashboard.html"
+                       access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_LDAP_${data.flow.monitoring.ldap.returnedRole}')"/>
+        <intercept-url pattern="/ajax/scenarios/*/configurations/*" method="GET" access="permitAll"/>
+        <intercept-url pattern="/ajax/scenarios/*/metrics/*/observations" method="POST" access="permitAll"/>
+        <intercept-url pattern="/ajax/**/"
+                       access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_LDAP_${data.flow.monitoring.ldap.returnedRole}')"/>
+
+        <form-login login-page="/login.html" login-processing-url="/login" username-parameter="username"
+                    password-parameter="password"
+                    authentication-success-handler-ref="securityHandlers"
+                    authentication-failure-handler-ref="securityHandlers"/>
+
+        <logout logout-url="/logout" success-handler-ref="securityHandlers"/>
+
+        <!-- Enabling CSRF protection.
+        URLs exception are handled by the matcher and
+        custom CSRF token exchange is managed by the token repository -->
+        <csrf disabled="false" request-matcher-ref="csrfSecurityRequestMatcher" token-repository-ref="csrfTokenRepository"/>
+
+        <!-- Filter for preparing CSRF token as AngularJS expects -->
+        <custom-filter ref="csrfHeaderFilter" after="CSRF_FILTER"/>
+    </http>
+
+    <!-- URL exceptions for CSRF verification are handled in this bean (e.g. hessian) -->
+    <beans:bean id="csrfSecurityRequestMatcher" class="eu.dnetlib.monitoring.server.security.CsrfSecurityRequestMatcher"/>
+    <!-- Manages how the set-cookie is sent by the server. -->
+    <beans:bean id="csrfHeaderFilter" class="eu.dnetlib.monitoring.server.security.CsrfHeaderFilter"/>
+    <!-- Manages how the CSRF tokes is found by the server -->
+    <beans:bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository">
+        <!-- The server expects back this header param to let the request pass further -->
+        <beans:property name="headerName" value="X-XSRF-TOKEN"/>
+    </beans:bean>
+
+    <ldap-server url="${data.flow.monitoring.ldap.server}" root="${data.flow.monitoring.ldap.root}"/>
+
+    <beans:bean id="securityHandlers" class="eu.dnetlib.monitoring.server.security.LoginLogoutSecurityHandlers"/>
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider>
+            <user-service>
+                <user name="dfm" password="mfd" authorities="ROLE_ADMIN"/>
+                <user name="guest" password="guest" authorities="ROLE_USER"/>
+            </user-service>
+        </authentication-provider>
+        <ldap-authentication-provider role-prefix="ROLE_LDAP_"
+                                      user-dn-pattern="${data.flow.monitoring.ldap.userDnPattern}"
+                                      group-role-attribute="${data.flow.monitoring.ldap.groupRoleAttribute}"
+                                      group-search-base="${data.flow.monitoring.ldap.groupSearchBase}"/>
+    </authentication-manager>
+
+</beans:beans>

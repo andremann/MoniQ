@@ -1,0 +1,11 @@
+<div class="row">
+	<div class="col-md-12">
+        <h1 class="page-header">Configuration explorer for scenario ({{dashboard.currentScenario}})</h1>
+    </div>
+</div>
+
+<div class="row" ng-repeat="control in configurationsExplorer.configuration">
+	<div class="col-lg-12">
+		<pre>{{control.params | json:2}}</pre>
+	</div>
+</div>

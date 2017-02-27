@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>eu.dnetlib</groupId>
+        <artifactId>cnr-data-flow-monitoring-parent</artifactId>
+        <version>1.0.1</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>eu.dnetlib</groupId>
+	<artifactId>cnr-data-flow-monitoring-core</artifactId>
+	<version>0.0.12</version>
+	<name>cnr-data-flow-control-client</name>
+	<url>http://maven.apache.org</url>
+	<scm>
+		<developerConnection>scm:svn:https://svn.driver.research-infrastructures.eu/driver/data-flow-monitoring/cnr-data-flow-monitoring-core/tags/cnr-data-flow-monitoring-core-0.0.12</developerConnection>
+	</scm>
+	<dependencies>
+		<!-- Data Flow Monitoring RMI -->
+		<dependency>
+			<groupId>eu.dnetlib</groupId>
+			<artifactId>cnr-data-flow-monitoring-rmi</artifactId>
+			<version>[0.0.1,1.0.0)</version>
+		</dependency>
+		
+		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+		  	<artifactId>commons-logging</artifactId>
+		  	<version>1.1.3</version>
+		</dependency>
+
+		<!-- Dom4j -->
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		
+		<!-- Solr Java driver  -->
+		<dependency>
+		    <groupId>org.apache.solr</groupId>
+		    <artifactId>solr-solrj</artifactId>
+		    <version>4.10.3</version>
+		</dependency>
+		
+		<!-- Redis Java driver  -->
+		<dependency>
+		    <groupId>redis.clients</groupId>
+		    <artifactId>jedis</artifactId>
+		    <version>2.6.2</version>
+		</dependency>
+		
+	</dependencies>
+</project>

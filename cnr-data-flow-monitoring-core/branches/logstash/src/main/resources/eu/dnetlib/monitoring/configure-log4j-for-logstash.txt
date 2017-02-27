@@ -1,0 +1,8 @@
+### Configuration for the DFM appender ###
+log4j.appender.DFM=org.apache.log4j.net.SocketAppender
+log4j.appender.DFM.Port=4712
+log4j.appender.DFM.RemoteHost=localhost
+log4j.appender.DFM.ReconnectionDelay=3000
+log4j.appender.DFM.layout.ConversionPattern=[%-5p] %d %c - %m%n
+log4j.logger.eu.dnetlib.monitoring=INFO, DFM
+log4j.additivity.eu.dnetlib.monitoring=false

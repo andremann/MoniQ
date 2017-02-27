@@ -1,0 +1,15 @@
+{
+  "monitoringScenario": "JUnit",
+  "globalParams": {},
+  "globalLabels": {},
+  "metrics": {
+	"pojo_completeness": {
+	  "name": "pojo_completeness",
+	  "description": "pojo_completeness",
+	  "labels": {},
+	  "params": {
+		"fields": "['str1', 'str2', 'empty']"
+	  }
+	}
+  }
+}

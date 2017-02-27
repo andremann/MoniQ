@@ -1,0 +1,80 @@
+{
+  "scenarioId": "{{id}}",
+  "name": "myScenario",
+  "flow": {
+	"blockId": {
+	  "name": "myBlock",
+	  "description": "myBlockDescription",
+	  "typology": "{{PROCESSING | STORAGE}}",
+	  "to": "anotherBlockId"
+	}
+  },
+  "sensors": {
+	"sensorId": {
+	  "name": "mySensor",
+	  "description": "mySensorDescription",
+	  "anchorPoint": "blockId",
+	  "globalLabels": {
+		"globalLabelName": "labelValue"
+	  },
+	  "globalParams": {
+		"globalParamName": "globalParamValue"
+	  },
+	  "metrics": {
+		"metricId": {
+		  "name": "myMetric",
+		  "description": "myMetricDescription",
+		  "labels": {
+			"fixedLabelName": "fixedLabelValue",
+			"dynamicLabelName": "{{dynamicLabelValue}}"
+		  },
+		  "params": {
+			"paramName": "paramValue"
+		  }
+		}
+	  },
+	  "controls": {
+		"{{ctrlId}}": {
+		  "name": "{{control name}}",
+		  "description": "{{description}}",
+		  "selectors": [],
+		  "analyzerClass": "{{eu.dnetlib.monitoring..}}"
+		}
+	  }
+	}
+  },
+  "compoundSensor": {
+	"name": "{{sensor name}}",
+	"description": "{{description}}",
+	"enclosedSensors": [
+	  "{{sensorId}}"
+	],
+	"globalLabels": {
+	  "{{globalLabelName}}": "{{labelValue}}"
+	},
+	"globalParams": {
+	  "{{globalParamName}}": "{{globalParamValue}}"
+	},
+	"compoundMetrics": {
+	  "{{compoundMetricId}}": {
+		"name": "{{compound metric name}}",
+		"description": "{{description}}",
+		"labels": {
+		  "{{fixedLabelName}}": "fixedLabelValue",
+		  "{{runtimeLabelName}}": "{{runtimeLabelValue}}"
+		},
+		"params": {
+		  "{{paramName}}": "{{paramValue}}"
+		}
+	  }
+	},
+	"controls": {
+	  "{{ctrlId}}": {
+		"name": "{{Control name}}",
+		"description": "{{description}}",
+		"selectors": [],
+		"analyzerClass": "{{eu.dnetlib.monitoring..}}"
+	  }
+	}
+  }
+}

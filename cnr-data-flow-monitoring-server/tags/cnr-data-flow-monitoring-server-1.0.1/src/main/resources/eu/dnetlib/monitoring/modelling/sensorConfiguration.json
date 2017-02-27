@@ -1,0 +1,69 @@
+{
+  "monitoringScenario": "_my scenario_",
+  "dataflow": {
+	"_nodeID_": {
+	  "name": "_node name_",
+	  "description": "_node description_",
+	  "typology": "_PROCESS | STORAGE_",
+	  "to": "_anotherNodeID_"
+	}
+  },
+  "sensors": {
+	"_sensorID_": {
+	  "anchor": "_nodeID_",
+	  "globalLabels": {
+		"_globalLabelName_": "_labelValue_"
+	  },
+	  "metrics": {
+		"_metricID_": {
+		  "name": "_my metric_",
+		  "description": "_description_",
+		  "labels": {
+			"_fixedInnerLabelName_": "_someLabel_",
+			"_dynamicInnerLabel_": ""
+		  },
+		  "params": {
+			"_paramName_": "_paramValue_"
+		  }
+		}
+	  },
+	  "controls": {
+		"_ctrlID_": {
+		  "name": "_Control A_",
+		  "description": "_description_",
+		  "selectors": [],
+		  "analyzerClass": "_eu.dnetlib.monitoring.._"
+		}
+	  }
+	}
+  },
+  "compoundSensor": {
+	"enclosedSensors": [
+	  "_sensorID_"
+	],
+	"globalLabels": {
+	  "_globalLabelName_": "_labelValue_"
+	},
+	"compoundMetrics": {
+	  "_compoundMetricID_": {
+		"name": "_my compound metric_",
+		"description": "_description_",
+		"labels": {
+		  "_fixedInnerLabelName_": "_someLabel_",
+		  "_dynamicInnerLabel_": ""
+		},
+		"params": {
+		  "_paramName_": "_paramValue_"
+		}
+	  }
+	},
+	"controls": {
+	  "_ctrlID_": {
+		"name": "_Control A_",
+		"description": "_description_",
+		"selectors": [],
+		"analyzerClass": "_eu.dnetlib.monitoring.._"
+	  }
+	}
+  }
+}
